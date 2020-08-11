@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const geoData = require('./data/geo.js');
 const weatherData = require('./data/weather.js');
-const { request } = require('https');
+const request = require('superagent');
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -62,7 +62,7 @@ async function getWeather(lat,lon) {
     return forecastArray;
 }
 
-app.get('/weather', (req, res) => {
+app.get('/weather', async(req, res) => {
     try {
         const locationLat = req.query.latitude;
         const locationLon = req.query.longitude;
