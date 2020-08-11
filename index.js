@@ -29,7 +29,7 @@ async function getLatLong(cityName) {
 
 app.get('/location', async(req, res) => {
     try {
-        const locationInput = req.query.search;
+        const locationInput = 'portland';
     
         const mungedData = await getLatLong(locationInput);
         res.json(mungedData);
