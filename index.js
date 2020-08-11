@@ -47,7 +47,7 @@ app.get('/location', async(req, res) => {
 
 async function getWeather(lat,lon) {
     // TODO: we make an api call to get the weather
-    const response = await request.get(`https://api.weatherbit.io/v2.0/forecast/daily?&lat={locationLat}&lon={locationLon}&key={WEATHER_API_KEY}`);
+    const response = await request.get(`https://api.weatherbit.io/v2.0/forecast/daily?&lat=${locationLat}&lon=${locationLon}&key=${WEATHER_API_KEY}`);
 
     // const data = weatherData.data;
     const weather = response.body;
