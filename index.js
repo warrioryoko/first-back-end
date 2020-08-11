@@ -29,7 +29,7 @@ async function getLatLong(cityName) {
 
 app.get('/location', async(req, res) => {
     try {
-        const locationInput = 'portland';
+        const locationInput = req.query.search;
     
         const mungedData = await getLatLong(locationInput);
         res.json(mungedData);
@@ -50,7 +50,7 @@ async function getWeather(lat,lon) {
     const response = await request.get(`https://api.weatherbit.io/v2.0/forecast/daily?&lat=${lat}&lon=${lon}&key=${WEATHER_API_KEY}`);
 
     // const data = weatherData.data;
-    const weather = response.body;
+    const weather = response.body.data;
 
     const forecastArray = weather.map((weatherItem) => {
         return {
