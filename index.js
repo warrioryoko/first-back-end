@@ -5,7 +5,7 @@ const geoData = require('./data/geo.js');
 const weatherData = require('./data/weather.js');
 const app = express();
 
-const PORT = process.env.PORT;
+const port = process.env.PORT;
 
 app.use(cors());
 
