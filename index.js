@@ -9,10 +9,12 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
+app.use(express.static('public'));
 
 const {
     GEOCODE_API_KEY,
-    WEATHER_API_KEY
+    WEATHER_API_KEY,
+    TRAIL_API_KEY
 } = process.env;
 
 async function getLatLong(cityName) {
@@ -75,7 +77,41 @@ app.get('/weather', async(req, res) => {
 
 });
 
+async function getTrails(lat, lon) {
+    const response = await request.get(`https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${lon}&maxDistance=200&key=${TRAIL_API_KEY}`);
 
+    const trails = response.body.trails;
+
+    const trailsArray = trails.map((trailItem) => {
+        return {
+            name: trailItem.name,
+            location: trailItem.location,
+            stars: trailItem.stars,
+            star_votes: trailItem.starVotes,
+            summary: trailItem.summary,
+            length: trailItem['length'],
+            conditions: trailItem.conditionStatus,
+            conditionDetails: trailItem.conditionDetails,
+            condition_date: new Date((trailItem.conditionDate).split(" ")[0]).toDateString(),
+            condition_time: (trailItem.conditionDate).split(" ")[1]
+        };
+    });
+
+    return trailsArray;
+}
+
+app.get('/trails', async(req, res) => {
+    try {
+        const locationLat = req.query.latitude;
+        const locationLon = req.query.longitude;
+
+        const mungedData = await getTrails(locationLat, locationLon);
+        res.json(mungedData);
+    } catch(e) {
+        res.status(500).json({ error: e.message});
+    }
+
+});
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
